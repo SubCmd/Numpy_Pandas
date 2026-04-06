@@ -145,5 +145,5 @@ ratio = np.linspace(0, 1, 21)
 print(ratio)
 
 '''
-01_numpy.py
+01_numpy_basic.py
 '''

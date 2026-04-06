@@ -25,8 +25,8 @@
     git commit -m "함께 넣고 싶은 문장"
 
 5. Github 저장소(repository)
-    1) creat repository
-    2) https://github.com/SubCmd/python_advanced_pattern/tree/main
+    1) create repository
+    2) https://github.com/SubCmd/원하는 리포지토리명/tree/main
 
 6. 원격 저장소 연결
     git remote add origin "https://github.com/아이디/레포이름.git"
