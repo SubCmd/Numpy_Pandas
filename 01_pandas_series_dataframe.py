@@ -318,8 +318,39 @@ days = 30
 # - 전환수: np.random.randint(80, 250, size=30)
 # - 매출: np.random.randint(5000, 15000, size=30)
 
+df = pd.DataFrame({
+        "인덱스" : pd.date_range("2026-01-01", periods=30, freq="D"),
+        "DAU" : np.random.randint(3000, 5000, size=30),
+        "신규가입" : np.random.randint(100, 400, size=30),
+        "전환수" : np.random.randint(80, 250, size=30),
+        "매출" : np.random.randint(5000, 15000, size=30),
+}, index=pd.date_range("2026-01-01", periods=30, freq="D"))
 
+print(df)
 
+# 1. DataFrame 생성 후 info()로 구조 확인
+print(df.info())
+
+# 2. 파생 지표 추가:
+#  - 전환율 = 전환수 / DAU × 100
+#  - ARPU = 매출 / DAU
+#  - 가입전환비 = 전환수 / 신규가입 × 100
+df["전환율"] = df["전환수"] / df["DAU"] * 100
+df["ARPU"] = df["매출"] / df["DAU"]
+df["가입전환비"] = df["전환수"] / df["신규가입"] * 100
+print(df)
+
+# 3. describe()로 전체 통계 확인
+print(df.describe())
+
+# 4. 전환율이 전체 평균 이상인 날만 필터링하여 새 DataFrame 생성
+avg_cvr = df["전환율"].mean()
+high_cvr = df[df["전환율"] >= avg_cvr]
+print(f"평균 이상 일수 : {len(high_cvr)} / {len(df)}")
+
+# 5. 필터링된 날의 평균 매출 vs 전체 평균 매출 비교
+print(f"고전환 평균 매출: {high_cvr['매출'].mean():,.0f}")
+print(f"전체 평균 매출:   {df['매출'].mean():,.0f}")
 
 '''
 python 01_pandas_series_dataframe.py
