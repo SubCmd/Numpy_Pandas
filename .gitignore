@@ -1,0 +1,4 @@
+# python venv 파일
+# : mac, windows 각각에서 작업 진행하기 때문에 제외 
+# : 용량이 커서 제외
+.venv/
