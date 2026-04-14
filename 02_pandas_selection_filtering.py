@@ -199,17 +199,66 @@ df = pd.DataFrame({
     "DAU": np.random.randint(500, 3000, size=15),
     "CVR": np.round(np.random.uniform(1.0, 6.0, size=15), 1),
 })
+print(df)
 
 # 1. DAU 1500 이상인 행
+print(f"DAU 1500 이상 : {df[df['DAU'] >= 1500]}")
 
 # 2. 채널이 "paid"인 행
+print(f"paid : {df[df['채널'] == 'paid']}")
 
 # 3. CVR이 3.0 이상 5.0 이하인 행
+print(df[(df['CVR'] >= 3.0) & (df['CVR'] <= 5.0)])
+# print(df[df["CVR"].between(3.0, 5.0)])
 
 # 4. organic 채널 중 DAU 1000 이상인 행
+print(df[(df["채널"] == 'organic') & (df["DAU"] >= 1000)])
 
 # 5. 위 4번을 query()로 재작성
+print(df.query("(채널 == 'organic') & (DAU >= 1000)"))
 
+
+# ================================================
+# Lv.2 응용 — 복합 개념 조합
+
+# 문제 2-1) 다조건 데이터 추출 & 가공
+import numpy as np
+import pandas as pd
+
+np.random.seed(42)
+n = 200
+df = pd.DataFrame({
+    "order_id": range(1, n+1),
+    "user_id": np.random.randint(1000, 1200, size=n),
+    "category": np.random.choice(["전자기기", "의류", "식품", "생활용품"], size=n),
+    "amount": np.random.randint(5000, 200000, size=n),
+    "is_returned": np.random.binomial(1, 0.08, size=n),
+})
+print(df)
+
+# 1. 반품되지 않은 주문만 필터링
+not_returned = df[df["is_returned"] == 0]
+print(f"반품 제외 : {len(not_returned)}건")
+
+# 2. 카테고리별 주문 건수와 평균 주문액 (groupby)
+print(df.groupby("category")["amount"].agg(["count", "mean"]))
+
+# 3. 주문액 상위 10건 추출 (nlargest)
+print(df.nlargest(10, "amount")[["order_id", "category", "amount"]])
+
+# 4. 주문액 5만원 이상 AND 반품 아닌 주문의 카테고리 분포
+filtered = df[(df["amount"] >= 50000) & df["is_returned"] == 0]
+print(filtered["category"].value_counts())
+# 데이터프레임 내 특정 열에서 고유값들 빈도수를 계산해 내림차순으로 정렬된 Sereis 반환
+
+# 5. 유저별 주문 횟수 계산 후, 3회 이상 주문한 유저 ID 추출
+user_counts = df["user_id"].value_counts()
+repeat_users = user_counts[user_counts >=3].index.tolist()
+print(f"3회 이상 주문 유저: {len(repeat_users)}명")
+
+# 6. loc으로 amount 열을 "주문금액"으로 rename 처리
+df = df.rename(columns={"amount" : "주문금액"})
+print(df)
 
 '''
 python 02_pandas_selection_filtering.py
