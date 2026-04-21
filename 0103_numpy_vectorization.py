@@ -308,8 +308,6 @@ growth = (actuals[:, 1:] - actuals[:, :-1]) / actuals[:, :-1] * 100
 print(f"전월 대비 성장률(%):\n{np.round(growth, 1)}")
 
 
-
-
 '''
 py 03_numpy_vectorization.py
 '''
